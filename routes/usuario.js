@@ -18,7 +18,7 @@ app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Usuario.find({}, 'nombre email img role', )
+    Usuario.find({}, 'nombre email img role google', )
         .skip(desde)
         .limit(5)
         .exec(
@@ -56,12 +56,12 @@ app.get('/', (req, res, next) => {
 // =========================================
 // Actualizar usuario
 // =========================================
-app.put('/:id', (req, res) => {
+app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
 
-    Usuario.findById(id, mdAutenticacion.verificaToken, (err, usuario) => {
+    Usuario.findById(id, (err, usuario) => {
 
         if (err) {
             return res.status(500).json({
@@ -118,7 +118,7 @@ app.put('/:id', (req, res) => {
 // =========================================
 // Crear un nuevo usuario
 // =========================================
-app.post('/', mdAutenticacion.verificaToken, (req, res) => {
+app.post('/', (req, res) => {
 
     var body = req.body;
 
@@ -154,7 +154,7 @@ app.post('/', mdAutenticacion.verificaToken, (req, res) => {
 // =========================================
 // Eliminar usuario por id
 // =========================================
-app.delete('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.delete('/:id', [mdAutenticacion.verificaToken, mdAutenticacion.verificaADMIN_ROLE], (req, res) => {
 
     var id = req.params.id;
 

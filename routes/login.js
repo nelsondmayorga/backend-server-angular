@@ -70,7 +70,8 @@ app.post('/google', (req, res) => {
                             ok: true,
                             usuario: usuario,
                             token: token,
-                            id: usuario._id
+                            id: usuario._id,
+                            menu: obtenerMenu(usuario.role)
                         });
                     }
                     // Si el usuario no existe por correo
@@ -100,7 +101,8 @@ app.post('/google', (req, res) => {
                             ok: true,
                             usuario: usuarioDB,
                             token: token,
-                            id: usuarioDB._id
+                            id: usuarioDB._id,
+                            menu: obtenerMenu(usuarioDB.role)
                         });
 
                     })
@@ -166,7 +168,8 @@ app.post('/', (req, res) => {
             ok: true,
             usuario: usuarioDB,
             token: token,
-            id: usuarioDB._id
+            id: usuarioDB._id,
+            menu: obtenerMenu(usuarioDB.role)
         });
 
 
@@ -174,6 +177,39 @@ app.post('/', (req, res) => {
 
 
 });
+
+
+function obtenerMenu( ROLE ) {
+
+    var menu = [
+    {
+      titulo: 'Principal',
+      icono: 'mdi mdi-gauge',
+      submenus: [
+        {titulo: 'Dashboard', url: '/dashboard'},
+        {titulo: 'ProgressBar', url: '/progress'},
+        {titulo: 'Graficas', url: '/graficas1'},
+        {titulo: 'Promesas', url: '/promesas'},
+      ]
+    },
+    {
+      titulo: 'Mantenimientos',
+      icono: 'mdi mdi-folder-lock-open',
+      submenus: [
+        // {titulo: 'Usuarios', url: '/usuarios'},
+        {titulo: 'Hospitales', url: '/hospitales'},
+        {titulo: 'Médicos', url: '/medicos'}
+      ]
+    }
+  ];
+
+  if ( ROLE === 'ADMIN_ROLE') {
+        menu[1].submenus.unshift({titulo: 'Usuarios', url: '/usuarios'});
+  }
+
+
+    return menu;
+}
 
 
 module.exports = app;
